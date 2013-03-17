@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://nant.sf.net/release/0.92/nant.xsd" name="SimpleNetGame" default="build" basedir="..">
+   <property name="build.debug" value="true" unless="${property::exists('build.debug')}" />
+   <property name="build.configuration" value="debug" unless="${property::exists('build.configuration')}" />
+   <property name="build.framework" value="net-4.0" unless="${property::exists('build.framework')}" />
+   <loadfile file="VERSION" property="build.version" />
+   
+   
+   <property name="dir.base" value="${project::get-base-directory()}" />
+   <property name="dir.lib" value="${dir.base}/lib" />
+   <property name="dir.tools" value="${dir.base}/tools" />
+   <property name="dir.source" value="${dir.base}/src" />
+   <property name="dir.output" value="${dir.base}/output" />
+   <property name="dir.framework" value="${framework::get-framework-directory(build.framework)}" />
+
+   <property name="file.solution" value="${dir.source}/SimpleNetGame.sln" />
+
+   <property name="name" value="${project::get-name()}" />
+
+   <target name="init">
+      <mkdir dir="${dir.output}" unless="${directory::exists(dir.output)}" />
+      <delete>
+         <fileset basedir="${dir.output}">
+            <include name="*.*" />
+         </fileset>
+      </delete>
+   </target>
+      
+   
+   
+   <target name="build" depends="init">
+      <exec program="${dir.framework}/MSBuild.exe">
+         <arg value="${file.solution}" />
+         <arg value="/p:Configuration=${build.configuration}" />
+         <arg value="/p:WarningLevel=4" />
+         <arg value="/p:TargetFrameworkVersion=v4.5" />
+         <arg value="/p:OutputPath=${dir.output}" />
+      </exec>
+      
+   </target>
+</project>
